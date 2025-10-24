@@ -57,7 +57,7 @@
       opacity: 0.8;
     }
 
-    /* MAIN CONTENT */
+    /* MAIN LAYOUT */
     main {
       display: flex;
       justify-content: space-between;
@@ -66,28 +66,30 @@
       flex: 1;
     }
 
-    /* LEFT FORM SECTION */
+    /* FORM CARD - perfectly matches home.html proportions */
     .form-section {
       background: white;
-      border-radius: 20px;
-      padding: 1.2rem 2.5rem 2.5rem; /* reduced top padding */
-      max-width: 500px;
-      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+      border-radius: 25px;
+      padding: 1.5rem 2rem 2rem;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+      transition: all 0.3s ease;
     }
 
     .form-section h2 {
-      font-size: 1.9rem;
+      font-size: 1.8rem;
       font-weight: 700;
-      margin-bottom: 1.2rem;
+      margin-bottom: 1rem;
     }
 
     .form-container {
       background: black;
-      padding: 1.8rem;
-      border-radius: 15px;
+      padding: 1.6rem;
+      border-radius: 20px;
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: 0.9rem;
     }
 
     .form-container input[type="text"],
@@ -108,14 +110,15 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 0.95rem;
-      margin-top: 0.3rem;
+      margin-top: 0.5rem;
+      transition: 0.2s;
     }
 
     .form-container button:hover {
       opacity: 0.9;
     }
 
-    /* RIGHT ITEMS SECTION */
+    /* RIGHT SIDE */
     .items-section {
       flex: 1;
       margin-left: 4rem;
@@ -181,7 +184,6 @@
     }
   </style>
 </head>
-
 <body>
   <header>
     <div class="logo">
@@ -192,7 +194,6 @@
   </header>
 
   <main>
-    <!-- FORM SECTION -->
     <section class="form-section">
       <h2>Found something?</h2>
       <form method="POST" enctype="multipart/form-data" action="{% url 'item_create' %}">
@@ -207,7 +208,6 @@
       </form>
     </section>
 
-    <!-- REPORTED ITEMS -->
     <section class="items-section">
       <h2>Reported Items</h2>
       {% for item in items %}
