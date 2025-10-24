@@ -1,0 +1,165 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ item.title }} | Reclaimr</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url("{% static 'images/4.png' %}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      color: #000;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 60px;
+    }
+
+    header h1 {
+      color: #fff;
+      font-size: 2.2em;
+      margin: 0;
+    }
+
+    header span {
+      font-size: 1.1em;
+      color: #ccc;
+      margin-left: 8px;
+    }
+
+    .back-btn {
+      background: #fff;
+      color: #000;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .back-btn:hover {
+      background: #ddd;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+      padding: 20px;
+    }
+
+    .item-box {
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      width: 550px;
+      padding: 40px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      text-align: center;
+    }
+
+    .item-box img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      margin-bottom: 20px;
+    }
+
+    .item-box h2 {
+      margin-bottom: 15px;
+      color: #111;
+      font-size: 1.8em;
+    }
+
+    .item-box p {
+      font-size: 1em;
+      margin: 8px 0;
+      color: #333;
+    }
+
+    .item-box strong {
+      color: #000;
+    }
+
+    .item-actions {
+      margin-top: 25px;
+    }
+
+    .item-actions a {
+      display: inline-block;
+      margin: 5px 8px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .edit-btn {
+      background: #007bff;
+      color: #fff;
+    }
+    .edit-btn:hover {
+      background: #0056b3;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: #fff;
+    }
+    .delete-btn:hover {
+      background: #b02a37;
+    }
+
+    .back-home {
+      background: #000;
+      color: #fff;
+    }
+    .back-home:hover {
+      background: #333;
+    }
+
+    @media (max-width: 600px) {
+      .item-box {
+        width: 100%;
+        padding: 25px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Reclaimr <span>Lost and Found System</span></h1>
+    <button class="back-btn" onclick="window.location.href='/'">Back to Home</button>
+  </header>
+
+  <main>
+    <div class="item-box">
+      {% if item.image %}
+        <img src="{{ item.image.url }}" alt="{{ item.title }}">
+      {% else %}
+        <img src="https://via.placeholder.com/400x300?text=No+Image" alt="No image">
+      {% endif %}
+
+      <h2>{{ item.title }}</h2>
+      <p><strong>Description:</strong> {{ item.description }}</p>
+      <p><strong>Category:</strong> {{ item.category }}</p>
+      <p><strong>Location:</strong> {{ item.location }}</p>
+      <p><strong>Contact Info:</strong> {{ item.contact_info }}</p>
+
+      <div class="item-actions">
+        <a href="{% url 'item_update' item.pk %}" class="edit-btn">Edit</a>
+        <a href="{% url 'item_delete' item.pk %}" class="delete-btn">Delete</a>
+        <a href="{% url 'item_list' %}" class="back-home">Back to List</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html>

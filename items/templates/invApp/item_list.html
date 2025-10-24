@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reclaimr | Lost and Found System</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url("{% static 'images/4.png' %}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      color: #000;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px 60px;
+    }
+
+    header h1 {
+      color: #fff;
+      font-size: 2.2em;
+      margin: 0;
+    }
+
+    header span {
+      font-size: 1.1em;
+      color: #ccc;
+      margin-left: 8px;
+    }
+
+    .admin-btn {
+      background: #fff;
+      color: #000;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .admin-btn:hover {
+      background: #ddd;
+    }
+
+    main {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 60px;
+      gap: 40px;
+    }
+
+    /* Left Section: Report box */
+    .report-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px;
+      width: 35%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    }
+
+    .report-box h2 {
+      font-size: 1.8em;
+      margin-bottom: 15px;
+    }
+
+    .report-box p {
+      color: #444;
+      font-size: 1.1em;
+      margin-bottom: 25px;
+    }
+
+    .report-btn {
+      background: #000;
+      color: #fff;
+      font-size: 1.1em;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .report-btn:hover {
+      background: #333;
+    }
+
+    /* Right Section: Reported items */
+    .items-section {
+      flex: 1;
+    }
+
+    .items-section h2 {
+      color: #fff;
+      font-size: 1.8em;
+      margin-bottom: 25px;
+    }
+
+    .item-card {
+      background: rgba(255,255,255,0.9);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .item-details {
+      max-width: 70%;
+    }
+
+    .item-details h3 {
+      margin: 0 0 8px;
+    }
+
+    .item-details p {
+      margin: 4px 0;
+      color: #333;
+      font-size: 1em;
+    }
+
+    .item-img {
+      width: 120px;
+      height: 100px;
+      border-radius: 10px;
+      background: #ccc;
+      overflow: hidden;
+    }
+
+    .item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        flex-direction: column;
+      }
+      .report-box, .items-section {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Reclaimr <span>Lost and Found System</span></h1>
+    <button class="admin-btn" onclick="window.location.href='{% url 'admin:index' %}'">Admin Login</button>
+  </header>
+
+  <main>
+    <section class="report-box">
+      <h2>Found something?</h2>
+      <p>Help us reunite lost items with their rightful owners by submitting a detailed report.</p>
+      <button class="report-btn" onclick="window.location.href='{% url 'item_create' %}'">Report an item</button>
+    </section>
+
+    <section class="items-section">
+      <h2>Reported Items</h2>
+      {% for item in items %}
+        <div class="item-card" onclick="window.location.href='{% url 'item_detail' item.pk %}'" style="cursor:pointer;">
+          <div class="item-details">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+            <p><strong>Location:</strong> {{ item.location }}</p>
+            <p><strong>Reported:</strong> {{ item.date_reported|date:'Y-m-d' }}</p>
+          </div>
+          <div class="item-img">
+            {% if item.image %}
+              <img src="{{ item.image.url }}" alt="Item Image">
+            {% else %}
+              <img src="https://via.placeholder.com/120x100?text=No+Image" alt="No Image">
+            {% endif %}
+          </div>
+        </div>
+      {% empty %}
+        <p style="color:#fff;">No items have been reported yet.</p>
+      {% endfor %}
+    </section>
+  </main>
+</body>
+</html>

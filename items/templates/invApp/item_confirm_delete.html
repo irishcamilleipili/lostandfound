@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Delete Item | Reclaimr</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: url("{% static 'images/4.png' %}") no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      color: #000;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .delete-box {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      width: 420px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #111;
+    }
+
+    p {
+      margin-bottom: 30px;
+      color: #333;
+      font-size: 1.05em;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 0 10px;
+    }
+
+    .delete-btn {
+      background: #dc3545;
+      color: #fff;
+    }
+    .delete-btn:hover {
+      background: #b02a37;
+    }
+
+    .cancel-btn {
+      background: #000;
+      color: #fff;
+    }
+    .cancel-btn:hover {
+      background: #333;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="delete-box">
+      <h2>Confirm Deletion</h2>
+      <p>Are you sure you want to delete <strong>"{{ item.title }}"</strong>?</p>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn delete-btn">Yes, Delete</button>
+        <a href="{% url 'item_list' %}" class="btn cancel-btn">Cancel</a>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
