@@ -16,7 +16,6 @@
       flex-direction: column;
     }
 
-    /* HEADER */
     header {
       display: flex;
       justify-content: space-between;
@@ -57,7 +56,6 @@
       opacity: 0.8;
     }
 
-    /* MAIN LAYOUT */
     main {
       display: flex;
       justify-content: space-between;
@@ -66,7 +64,6 @@
       flex: 1;
     }
 
-    /* FORM CARD - perfectly matches home.html proportions */
     .form-section {
       background: white;
       border-radius: 25px;
@@ -118,7 +115,6 @@
       opacity: 0.9;
     }
 
-    /* RIGHT SIDE */
     .items-section {
       flex: 1;
       margin-left: 4rem;
@@ -168,7 +164,6 @@
       object-fit: cover;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 900px) {
       main {
         flex-direction: column;
@@ -199,10 +194,11 @@
       <form method="POST" enctype="multipart/form-data" action="{% url 'item_create' %}">
         {% csrf_token %}
         <div class="form-container">
-          <input type="text" name="name" placeholder="Item Name" required />
+          <input type="hidden" name="category" value="found" />
+          <input type="text" name="title" placeholder="Item Name" required />
           <input type="text" name="description" placeholder="Description" required />
           <input type="text" name="location" placeholder="Location" required />
-          <input type="file" name="image" />
+          <input type="file" name="image" accept="image/*" />
           <button type="submit">Submit report</button>
         </div>
       </form>
@@ -211,19 +207,21 @@
     <section class="items-section">
       <h2>Reported Items</h2>
       {% for item in items %}
-        <div class="item-card">
-          <div class="item-info">
-            <h3>{{ item.name }}</h3>
-            <p>{{ item.description }}</p>
-            <p><strong>Location:</strong> {{ item.location }}</p>
-            <p><strong>Reported:</strong> {{ item.date_reported|date:"Y-m-d" }}</p>
+        {% if item.category == "found" %}
+          <div class="item-card">
+            <div class="item-info">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.description }}</p>
+              <p><strong>Location:</strong> {{ item.location }}</p>
+              <p><strong>Reported:</strong> {{ item.date_reported|date:"Y-m-d" }}</p>
+            </div>
+            {% if item.image %}
+              <img src="{{ item.image.url }}" alt="{{ item.title }}" class="item-image" />
+            {% else %}
+              <div class="item-image"></div>
+            {% endif %}
           </div>
-          {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image" />
-          {% else %}
-            <div class="item-image"></div>
-          {% endif %}
-        </div>
+        {% endif %}
       {% empty %}
         <p>No items reported yet.</p>
       {% endfor %}

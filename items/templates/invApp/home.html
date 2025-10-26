@@ -16,7 +16,6 @@
     flex-direction: column;
   }
 
-  /* HEADER */
   header {
     display: flex;
     justify-content: space-between;
@@ -57,62 +56,59 @@
     opacity: 0.8;
   }
 
-  /* MAIN CONTENT */
- main {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 0 4rem;
-  flex: 1;
-}
+  main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 4rem;
+    flex: 1;
+  }
 
-/* LEFT SECTION — perfectly aligned to match item_form.html */
-/* LEFT SECTION — properly aligned with background */
-.left-section { 
-  background: white;
-  border-radius: 25px;
-  padding: 0.0rem 2rem 1.5rem; /* balanced top padding */
-  max-width: 440px;
-  width: 100%;
-  height: 250px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 0; /* don’t change */
-  transition: all 0.3s ease;
-}
+  .left-section { 
+    background: white;
+    border-radius: 25px;
+    padding: 0.0rem 2rem 1.5rem;
+    max-width: 440px;
+    width: 100%;
+    height: 250px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 0;
+    transition: all 0.3s ease;
+  }
 
-.left-section h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
+  .left-section h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
 
-.left-section p {
-  font-size: 0.95rem;
-  color: #333;
-  margin-bottom: 1.2rem;
-  line-height: 1.4;
-}
+  .left-section p {
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 1.2rem;
+    line-height: 1.4;
+  }
 
-.report-btn {
-  background: black;
-  color: white;
-  font-weight: 700;
-  padding: 13px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 0.97rem;
-  transition: 0.3s ease;
-  width: 100%;
-}
+  .report-btn {
+    background: black;
+    color: white;
+    font-weight: 700;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.97rem;
+    transition: 0.3s ease;
+    width: 100%;
+  }
 
-.report-btn:hover {
-  opacity: 0.9;
-}
-  /* RIGHT SECTION */
+  .report-btn:hover {
+    opacity: 0.9;
+  }
+
   .items-section {
     flex: 1;
     margin-left: 4rem;
@@ -201,13 +197,13 @@
       {% for item in items %}
         <div class="item-card">
           <div class="item-info">
-            <h3>{{ item.name }}</h3>
+            <h3>{{ item.title }}</h3>
             <p>{{ item.description }}</p>
             <p><strong>Location:</strong> {{ item.location }}</p>
             <p><strong>Reported:</strong> {{ item.date_reported|date:"Y-m-d" }}</p>
           </div>
           {% if item.image %}
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image" />
+            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="item-image" />
           {% else %}
             <div class="item-image"></div>
           {% endif %}
