@@ -6,7 +6,7 @@
   <title>Delete Item | Reclaimr</title>
   <style>
     body {
-      font-family: "Segoe UI", Arial, sans-serif;
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
       background: url("{% static 'images/4.png' %}") no-repeat center center fixed;
       background-size: cover;
       margin: 0;
@@ -19,6 +19,12 @@
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .delete-box {
@@ -27,12 +33,13 @@
       width: 420px;
       padding: 40px;
       text-align: center;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
 
     h2 {
       margin-bottom: 20px;
       color: #111;
+      font-size: 1.8rem;
     }
 
     p {
@@ -44,11 +51,12 @@
     .btn {
       padding: 10px 20px;
       border-radius: 8px;
-      font-weight: bold;
+      font-weight: 600;
       border: none;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.3s ease;
       margin: 0 10px;
+      font-size: 1rem;
     }
 
     .delete-btn {
@@ -57,14 +65,35 @@
     }
     .delete-btn:hover {
       background: #b02a37;
+      transform: scale(1.05);
     }
 
     .cancel-btn {
       background: #000;
       color: #fff;
+      text-decoration: none;
+      display: inline-block;
     }
     .cancel-btn:hover {
       background: #333;
+      transform: scale(1.05);
+    }
+
+    /* Toast alert after delete */
+    .toast {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #28a745;
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      font-weight: 500;
+      font-size: 1rem;
+      z-index: 9999;
     }
   </style>
 </head>
@@ -73,12 +102,23 @@
     <div class="delete-box">
       <h2>Confirm Deletion</h2>
       <p>Are you sure you want to delete <strong>"{{ item.title }}"</strong>?</p>
-      <form method="post">
+      
+      <form method="post" id="deleteForm">
         {% csrf_token %}
         <button type="submit" class="btn delete-btn">Yes, Delete</button>
-        <a href="{% url 'item_list' %}" class="btn cancel-btn">Cancel</a>
+        <a href="{% url 'admin_panel' %}" class="btn cancel-btn">Cancel</a>
       </form>
     </div>
   </main>
+
+  <div id="toast" class="toast">Item deleted successfully!</div>
+
+  <script>
+    document.getElementById('deleteForm').addEventListener('submit', function (e) {
+      const toast = document.getElementById('toast');
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 2000);
+    });
+  </script>
 </body>
 </html>

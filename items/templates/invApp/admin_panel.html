@@ -9,7 +9,7 @@
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
-      background: url("{% static 'images/bg.jpg' %}") no-repeat center center fixed;
+      background: url("{% static 'images/4.png' %}") no-repeat center center fixed;
       background-size: cover;
       display: flex;
       flex-direction: column;
@@ -27,9 +27,23 @@
       margin-bottom: 30px;
     }
 
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 600;
+    /* ✅ SAME LOGO STYLE AS home.html + login.html */
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .logo h1 {
+      font-size: 2.4rem; /* same as home.html */
+      font-weight: 700;
+      margin: 0;
+      color: white;
+    }
+
+    .logo span {
+      font-size: 1.1rem; /* same as home.html */
+      opacity: 0.9;
       color: white;
     }
 
@@ -41,6 +55,8 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
+      text-decoration: none;
+      color: black;
     }
 
     .logout-btn:hover {
@@ -58,19 +74,20 @@
     .report-card {
       display: flex;
       align-items: flex-start;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(8px);
+      background: #ffffff;
       border-radius: 20px;
       padding: 20px;
       gap: 20px;
       color: #000;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
 
     .report-img {
       width: 90px;
       height: 90px;
-      background: white;
       border-radius: 15px;
+      object-fit: cover;
+      background: #fff;
       flex-shrink: 0;
     }
 
@@ -104,22 +121,28 @@
 
     .status-btn,
     .delete-btn {
-      padding: 8px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 40px;
+      width: 100px;
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      font-weight: 500;
+      font-weight: 600;
       transition: all 0.2s ease;
-    }
-
-    .status-btn.claimed {
-      background: #f5f5f5;
-      color: #000;
+      font-size: 0.95rem;
     }
 
     .status-btn.pending {
-      background: #f5f5f5;
+      background: #000;
+      color: #fff;
+    }
+
+    .status-btn.claimed {
+      background: #fff;
       color: #000;
+      border: 2px solid #000;
     }
 
     .delete-btn {
@@ -130,43 +153,111 @@
     .delete-btn:hover {
       background: #333;
     }
+
+    .no-items {
+      color: white;
+      font-size: 1.1rem;
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 700px) {
+      .logo h1 {
+        font-size: 1.9rem;
+      }
+
+      .logo span {
+        font-size: 0.95rem;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="header">
-    <h1>Reclaimr <span style="font-weight:400;">Lost and Found System</span></h1>
-    <button class="logout-btn">Logout</button>
+    <div class="logo">
+      <h1>Reclaimr</h1>
+      <span>Lost and Found System</span>
+    </div>
+    <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
   </div>
 
-  <h2 style="width:100%;max-width:1000px;color:white;margin-bottom:20px;">Manage Report</h2>
+  <h2 style="width:100%;max-width:1000px;color:white;margin-bottom:20px;">Manage Reports</h2>
 
   <div class="reports-container">
-    <!-- Example Report -->
-    <div class="report-card">
-      <div class="report-img"></div>
-      <div class="report-details">
-        <div class="report-title">Iphone 13 pro</div>
-        <div class="report-info">Reported: 2025-10-05</div>
-        <div class="report-desc">Black phone with a cracked screen protector. Has a white phone case.</div>
-      </div>
-      <div class="report-actions">
-        <button class="status-btn claimed">Claimed</button>
-        <button class="delete-btn">Delete</button>
-      </div>
-    </div>
-
-    <div class="report-card">
-      <div class="report-img"></div>
-      <div class="report-details">
-        <div class="report-title">Iphone 13 pro</div>
-        <div class="report-info">Reported: 2025-10-05</div>
-        <div class="report-desc">Black phone with a cracked screen protector. Has a white phone case.</div>
-      </div>
-      <div class="report-actions">
-        <button class="status-btn pending">Pending</button>
-        <button class="delete-btn">Delete</button>
-      </div>
-    </div>
+    {% if items %}
+      {% for item in items %}
+        <div class="report-card" data-item-id="{{ item.id }}">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" alt="Item Image" class="report-img">
+          {% else %}
+            <div class="report-img"></div>
+          {% endif %}
+          <div class="report-details">
+            <div class="report-title">{{ item.title }}</div>
+            <div class="report-info">Reported: {{ item.date_reported|date:"Y-m-d" }}</div>
+            <div class="report-desc">{{ item.description }}</div>
+          </div>
+          <div class="report-actions">
+            <button 
+              class="status-btn {% if item.status == 'Claimed' %}claimed{% else %}pending{% endif %}" 
+              onclick="toggleStatus({{ item.id }}, this)">
+              {{ item.status|default:"Pending" }}
+            </button>
+            <form method="POST" action="{% url 'item_delete' item.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="no-items">No reported items yet.</p>
+    {% endif %}
   </div>
+
+  <script>
+    // ✅ Toggle status (Pending <-> Claimed)
+    function toggleStatus(itemId, btn) {
+      const url = window.location.pathname.startsWith("/items/")
+        ? `/items/item/${itemId}/toggle-status/`
+        : `/item/${itemId}/toggle-status/`;
+
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCSRFToken(),
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/json'
+        },
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+      })
+      .then(data => {
+        if (data.status) {
+          btn.textContent = data.status;
+          btn.classList.toggle('claimed', data.status === 'Claimed');
+          btn.classList.toggle('pending', data.status !== 'Claimed');
+        } else if (data.error) {
+          alert('Error: ' + data.error);
+        }
+      })
+      .catch(error => console.error('Error toggling status:', error));
+    }
+
+    // ✅ Get CSRF token
+    function getCSRFToken() {
+      const name = 'csrftoken';
+      const cookies = document.cookie.split(';');
+      for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith(name + '=')) {
+          return decodeURIComponent(cookie.substring(name.length + 1));
+        }
+      }
+      return null;
+    }
+  </script>
 </body>
 </html>
